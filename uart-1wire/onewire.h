@@ -1,6 +1,8 @@
 #ifndef ONEWIRE_H
 #define ONEWIRE_H
 
+#include "config.h"
+
 #include <avr/io.h>
 
 #define true 1
