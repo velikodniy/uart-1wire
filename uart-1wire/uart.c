@@ -14,7 +14,7 @@ inline void UART_init() {
 	// Set baudrate
 	UBRRH = UBRRH_VALUE;
 	UBRRL = UBRRL_VALUE;
-	#if USE_2X
+	#if UART_USE_2X
 	UCSRA |= (1 << U2X);
 	#else
 	UCSRA &= ~(1 << U2X);
