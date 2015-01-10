@@ -1,18 +1,23 @@
+#include <stdio.h>
 #include <avr/io.h>
 #include "uart.h"
 #include "config.h"
+#include <util/setbaud.h>
 
-#include <stdio.h>
-
-#define UART_UBRR		(F_CPU/16/UART_BAUDRATE-1)
 
 // UART streams (eg. for printf)
 FILE uart_stdout = FDEV_SETUP_STREAM(&UART_putc_stream, NULL, _FDEV_SETUP_WRITE);
 FILE uart_stdin = FDEV_SETUP_STREAM(NULL, &UART_getc_stream, _FDEV_SETUP_READ);
 
 inline void UART_init() {
-	UBRRH = UART_UBRR >> 8;
-	UBRRL = UART_UBRR;
+	// Set baudrate
+	UBRRH = UBRRH_VALUE;
+	UBRRL = UBRRL_VALUE;
+	#if USE_2X
+	UCSRA |= (1 << U2X);
+	#else
+	UCSRA &= ~(1 << U2X);
+	#endif
 	
 	// RX enabled, TX enabled
 	UCSRB = (1<<RXEN) | (1<<TXEN);
