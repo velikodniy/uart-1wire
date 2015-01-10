@@ -40,12 +40,6 @@ void UART_putc(char c)
 	UDR = c;
 }
 
-// Send string
-void UART_puts(char* s) {
-	while(*s)
-		UART_putc(*s++);
-}
-
 // Receive char
 char UART_getc(void)
 {
