@@ -11,7 +11,5 @@
 
 // 1-wire settings
 #define MAXDEVICES				8			// Maximum number of devices on line
-#define UART_AS_OneWire			0			// Emulate 1-wire with UART
-#define OW_TWO_PINS				0			// Use 2 pins
 
 #endif /* CONFIG_H_ */

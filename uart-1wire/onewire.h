@@ -8,22 +8,11 @@
 #define true 1
 #define false 0
 
-#ifdef UART_AS_OneWire
-	#define USART_BAUDRATE_57600 (((F_CPU / (57600 * 16UL))) - 1)
-	#define USART_BAUDRATE_115200 (((F_CPU / (115200 * 16UL))) - 1)
-	#define USART_BAUDRATE_9600 (((F_CPU / (9600 * 16UL))) - 1)
-#else
-	#include <util/delay.h>
-	#define OW_DDR DDRB
-	#define OW_PORT PORTB
-	#define OW_PIN PINB
-	#ifndef OW_TWO_PINS //если используется один пин, укажите его номер
-		#define OW_BIT 0
-	#else // если используются 2 пина, укажите их номера
-		#define OW_BIT_OUT 1
-		#define OW_BIT_IN 0
-	#endif
-#endif
+#include <util/delay.h>
+#define OW_DDR DDRB
+#define OW_PORT PORTB
+#define OW_PIN PINB
+#define OW_BIT 0
 
 #define OW_CMD_SEARCHROM	0xF0
 #define OW_CMD_READROM		0x33
@@ -53,13 +42,8 @@
 unsigned char OW_Reset(void);
 void OW_WriteBit(unsigned char bit);
 unsigned char OW_ReadBit(void);
-#ifndef UART_AS_OneWire
-	unsigned char OW_ReadByte(void);
-	void OW_WriteByte(unsigned char byte);
-#else
-	unsigned char OW_WriteByte(unsigned char byte);
-	#define OW_ReadByte() OW_WriteByte(0xFF)
-#endif
+unsigned char OW_ReadByte(void);
+void OW_WriteByte(unsigned char byte);
 unsigned char OW_SearchROM( unsigned char diff, unsigned char *id );
 void OW_FindROM(unsigned char *diff, unsigned char id[]);
 unsigned char OW_ReadROM(unsigned char *buffer);
