@@ -7,12 +7,12 @@ int main(void)
 {
 	UART_init();
 	
-	printf("Echo: %d \r\n");
+	printf("Echo:\n");
 	
 	char c;
 	while(1) {
-		c = UART_getc();
 		UART_putc('>');
+		c = UART_getc();
 		UART_putc(c);
 		UART_putc('\n');
 		UART_putc('\r');
