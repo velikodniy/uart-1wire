@@ -10,6 +10,7 @@
 #define UART_FIX_LINE_ENDING	1			// Replace: \n -> \r\n
 
 // 1-wire settings
-#define MAXDEVICES				8			// Maximum number of devices on line
+#define OW_PORT_LETTER(x)		x##B		// Letter of 1-wire port (format: x##LETTER)
+#define OW_BIT					0			// Bit of 1-wire port
 
 #endif /* CONFIG_H_ */

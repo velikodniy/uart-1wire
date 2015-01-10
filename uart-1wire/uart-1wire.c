@@ -27,6 +27,8 @@ int main(void)
 
 // Device processing
 /*
+#define MAXDEVICES				8			// Maximum number of devices on line
+
 void print_address(unsigned char* address) {
 	printf("%.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X", address[0],address[1],address[2],address[3],address[4],address[5],address[6],address[7]);
 }
