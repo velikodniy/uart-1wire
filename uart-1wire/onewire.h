@@ -8,14 +8,6 @@
 #define true 1
 #define false 0
 
-#define MAXDEVICES 10
-
-// Если для эмуляции шины используется USART
-//#define UART_AS_OneWire
-
-// Если для эмуляции 1-wire не спольльзуется USART, но используется 2 пина (вход и выход)
-//#define OW_TWO_PINS
-
 #ifdef UART_AS_OneWire
 	#define USART_BAUDRATE_57600 (((F_CPU / (57600 * 16UL))) - 1)
 	#define USART_BAUDRATE_115200 (((F_CPU / (115200 * 16UL))) - 1)
