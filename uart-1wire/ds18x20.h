@@ -1,9 +1,7 @@
-
 #ifndef DS18x20_H
 #define DS18x20_H
 
 #include "onewire.h"
-
 
 
 /* list of these commands translated into C defines:*/
@@ -20,10 +18,9 @@
 
 #define DS18X20_CHECK_CRC
 
-uint8_t DS18x20_StartMeasure(uint8_t* rom);	//if rom==0 then skip rom
+uint8_t DS18x20_StartMeasure(uint8_t* rom);    //if rom==0 then skip rom
 uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer); //if rom==0 then skip rom
 void DS18x20_ConvertToThemperature(uint8_t* data, uint8_t* themp);
 float DS18x20_ConvertToThemperatureFl(uint8_t* data);
-
 
 #endif
