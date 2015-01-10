@@ -4,6 +4,6 @@
 
 #define F_CPU			8000000L	// CPU Frequency, Hz
 #define BAUD			9600		// UART Baud Rate, BPS
-
+#define UART_STDIN_ECHO				// Disable echo for stdin (eg. in scanf)
 
 #endif /* CONFIG_H_ */

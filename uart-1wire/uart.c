@@ -65,5 +65,9 @@ int UART_putc_stream(char c, FILE *stream) {
 
 // Get char from stream (for FDEV_SETUP_STREAM)
 int UART_getc_stream(FILE *stream) {
-	return UART_getc();
+	char c = UART_getc();
+	#ifdef UART_STDIN_ECHO
+	UART_putc(c);
+	#endif
+	return c;
 }
