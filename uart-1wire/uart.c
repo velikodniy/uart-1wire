@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <avr/io.h>
+#include <avr/sfr_defs.h>
 #include "uart.h"
 #include "config.h"
 #include <util/setbaud.h>
@@ -34,7 +35,7 @@ inline void UART_init() {
 void UART_putc(char c)
 {
 	// Wait until USART data register (UDR) is empty
-	while((UCSRA & (1 << UDRE)) == 0);
+	loop_until_bit_is_set(UCSRA, UDRE);
 	// Send data
 	UDR = c;
 }
@@ -49,8 +50,8 @@ void UART_puts(char* s) {
 char UART_getc(void)
 {
 	// Wait for data to be received
-	while ((UCSRA & (1 << RXC)) == 0);
-	// Get and return received data from buffer
+	loop_until_bit_is_set(UCSRA, RXC);
+	// Return received data
 	return UDR;
 }
 
