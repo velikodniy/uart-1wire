@@ -1,8 +1,7 @@
 #include <avr/io.h>
 #include "uart.h"
+#include "config.h"
 
-#define F_CPU			8000000L
-#define UART_BAUDRATE	9600
 #define UART_UBRR		(F_CPU/16/UART_BAUDRATE-1)
 
 inline void UART_init() {
