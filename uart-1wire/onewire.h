@@ -3,12 +3,11 @@
 
 #include "config.h"
 #include <avr/io.h>
-#include <util/delay.h>
 
+// Useful macros
 #define sbi(reg,bit)		reg |= (1<<bit)
 #define cbi(reg,bit)		reg &= ~(1<<bit)
 #define ibi(reg,bit)		reg ^= (1<<bit)
-#define CheckBit(reg,bit)	(reg&(1<<bit))
 
 // Port setup
 #define OW_DDR	OW_PORT_LETTER(DDR)
