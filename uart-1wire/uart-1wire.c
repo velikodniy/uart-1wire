@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "uart.h"
@@ -6,7 +7,7 @@ int main(void)
 {
 	UART_init();
 	
-	UART_puts("Echo: \r\n");
+	printf("Echo: %d \r\n");
 	
 	char c;
 	while(1) {
