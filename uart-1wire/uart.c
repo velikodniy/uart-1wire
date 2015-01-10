@@ -57,8 +57,10 @@ char UART_getc(void)
 
 // Put char into stream (for FDEV_SETUP_STREAM)
 int UART_putc_stream(char c, FILE *stream) {
+	#if UART_FIX_LINE_ENDING
 	if (c == '\n')
 		UART_putc('\r');
+	#endif
 	UART_putc(c);
 	return 0;
 }
