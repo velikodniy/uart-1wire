@@ -110,6 +110,18 @@
     <Compile Include="config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ds18x20.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ds18x20.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="onewire.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="onewire.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uart-1wire.c">
       <SubType>compile</SubType>
     </Compile>
