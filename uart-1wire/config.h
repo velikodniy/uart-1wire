@@ -13,4 +13,7 @@
 #define OW_PORT_LETTER(x)       x##B        // Letter of 1-wire port (format: x##LETTER)
 #define OW_BIT                  0           // Bit of 1-wire port
 
+// ds18x20 settings
+#define DS18X20_CHECK_CRC       1           // Check CRC
+
 #endif /* CONFIG_H_ */
