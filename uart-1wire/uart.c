@@ -1,14 +1,13 @@
+#include "config.h"
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
-#include "uart.h"
-#include "config.h"
 #include <util/setbaud.h>
+#include "uart.h"
 
 
 // UART streams (eg. for printf)
-FILE uart_stdout = FDEV_SETUP_STREAM(&UART_putc_stream, NULL, _FDEV_SETUP_WRITE);
-FILE uart_stdin = FDEV_SETUP_STREAM(NULL, &UART_getc_stream, _FDEV_SETUP_READ);
+FILE uart_stream = FDEV_SETUP_STREAM(&UART_putc_stream, &UART_getc_stream, _FDEV_SETUP_RW);
 
 inline void UART_init() {
     // Set baudrate
@@ -27,8 +26,7 @@ inline void UART_init() {
     UCSRC = (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);
     
     // Standard streams redirection
-    stdout = &uart_stdout;
-    stdin = &uart_stdin;
+    stdout = stdin = &uart_stream;
 }
 
 // Send char
