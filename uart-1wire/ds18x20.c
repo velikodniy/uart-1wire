@@ -1,4 +1,5 @@
 #include "config.h"
+#include <util/crc16.h>
 #include "ds18x20.h"
 
 uint8_t DS18x20_StartMeasure(uint8_t* rom)
@@ -14,6 +15,8 @@ uint8_t DS18x20_StartMeasure(uint8_t* rom)
 }
 
 #ifdef DS18X20_CHECK_CRC
+
+/*
 #define CRC8INIT    0x00
 #define CRC8POLY    0x18              //0X18 = X^8+X^5+X^4+X^0
 
@@ -45,7 +48,16 @@ uint8_t crc8(uint8_t *data_in, unsigned int number_of_bytes_to_read )
         while (bit_counter > 0);
     }
     return crc;
+} */
+
+// Optimized Dallas (now Maxim) iButton 8-bit CRC calculation.
+uint8_t crc8 (uint8_t *data, uint8_t count) {
+    uint8_t crc = 0x00; // Initial value
+    for (uint8_t i = 0; i < count; i++)
+        crc = _crc_ibutton_update(crc, data[i]);
+    return crc;
 }
+
 #endif 
 
 uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
