@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 #include "uart.h"
 
 #include <math.h>
@@ -25,7 +26,7 @@ int main(void)
 }
 
 void interactive(void) {
-    puts("\n1wire-UART bridge");
+    puts_P(PSTR("\n1wire-UART bridge"));
     char cmd;
     while(1) {
         putchar('>');
@@ -35,7 +36,7 @@ void interactive(void) {
         case 'q':
             return;
         default:
-            puts("Unknown command");
+            puts_P(PSTR("Unknown command"));
         }
     }
 }
