@@ -5,23 +5,38 @@
 
 #include <math.h>
 
+void interactive(void);
+
 int main(void)
 {
+    char cmd;
+    
     UART_init();
     
-    printf("1wire-UART bridge:\n");
-    
-    int x;
-    scanf("%d", &x);
-    printf("2x = %d", 2*x);
-    
-    char c;
+    // Main loop
+    while (1) {
+        cmd = getchar();
+        switch(cmd) {
+        case 'i':
+            interactive();
+            break;
+        }
+    }
+}
+
+void interactive(void) {
+    puts("\n1wire-UART bridge");
+    char cmd;
     while(1) {
-        UART_putc('>');
-        c = UART_getc();
-        UART_putc(c);
-        UART_putc('\n');
-        UART_putc('\r');
+        putchar('>');
+        cmd = getchar();
+        putchar('\n');
+        switch(cmd) {
+        case 'q':
+            return;
+        default:
+            puts("Unknown command");
+        }
     }
 }
 
