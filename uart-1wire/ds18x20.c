@@ -3,7 +3,7 @@
 #include "onewire.h"
 #include "ds18x20.h"
 
-uint8_t DS18x20_StartMeasure(uint8_t* rom)
+uint8_t DS18x20_StartMeasure(OW_ROM_t rom)
 {
     //Reset, skip ROM and start temperature conversion
     if (!OW_Reset()) return 0;
@@ -15,7 +15,7 @@ uint8_t DS18x20_StartMeasure(uint8_t* rom)
     return 1;
 }
 
-uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
+uint8_t DS18x20_ReadData(OW_ROM_t rom, uint8_t *buffer)
 {
     //Reset, skip ROM and send command to read Scratchpad
     if (!OW_Reset()) return 0;
@@ -66,7 +66,7 @@ uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
 
 // Set ADC resolution
 // res = 9, 10, 11, or 12
-uint8_t DS18x20_SetResolution(uint8_t* rom, uint8_t res) {
+uint8_t DS18x20_SetResolution(OW_ROM_t rom, uint8_t res) {
     uint8_t data[3] = {0};
     
     // Convert res to bits
