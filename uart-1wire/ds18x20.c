@@ -48,39 +48,26 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
     return 1;
 }
 
-void DS18x20_ConvertToThemperature(uint8_t* data, uint8_t* themp)
+// Convert data to Celsius degrees
+// temp must be uint8_t[2] array.
+// temp[0] - integer part
+// temp[1] - fractional part (*10^-2)
+void DS18x20_DataConvert(uint8_t* data, int8_t* temp)
 {
-    //Store temperature integer digits and decimal digits
-    themp[0] = data[0]>>4;
-    themp[0] |= (data[1]&0x07)<<4;
-    //Store decimal digits
-    themp[1] = data[0]&0xf;
-    themp[1] *= 6;    
-    if (data[1]>0xFB){
-        themp[0] = 127-themp[0];
-        themp[0] |= 0b10000000; // for negative temperature (alse see below)
-    } 
-}
+    // Store temperature integer part
+    temp[0] = data[0] >> 4;             // Decode LS byte
+    temp[0] |= (data[1] & 0x07) << 4;   // Decode MS byte
 
-float DS18x20_ConvertToThemperatureFl(uint8_t* data)
-{
-    float    Temperature;
-    uint8_t    digit, decimal;
-    //Store temperature integer digits and decimal digits
-    digit = data[0]>>4;
-    digit |= (data[1]&0x07)<<4;
-    //Store decimal digits
-    decimal = data[0]&0xf;
-    decimal *= 6;    
+    // Check sign
+    if (data[1] & 0xF8)
+        temp[0] = - temp[0];
     
-    if (data[1]>0xFB) digit = 127-digit;
-    if (decimal<100) Temperature = digit + ((float)decimal/100);
-        else Temperature = digit + ((float)decimal/1000);
-    if (data[1]>0xFB) Temperature = -Temperature;
-    /*
-    if (data[1]>0xFB){
-        digit = 127-digit;
-        digit |= 0b10000000; // for negative temperature
-    } */
-    return Temperature;
+    // Compute fractional part (*10^-2)
+    uint16_t frac;
+    frac = data[0] & 0x0f;
+    // Multiplying by 6.25 = 50 / 8
+    frac *= 50;
+    frac >>= 3;
+    // Store value
+    temp[1] = frac;
 }
