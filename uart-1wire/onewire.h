@@ -41,16 +41,18 @@
 // ROM-code size including CRC
 #define OW_ROMCODE_SIZE    8
 
-unsigned char OW_Reset(void);
-void OW_WriteBit(unsigned char bit);
-unsigned char OW_ReadBit(void);
-unsigned char OW_ReadByte(void);
-void OW_WriteByte(unsigned char byte);
-unsigned char OW_SearchROM(unsigned char diff, unsigned char *id);
-void OW_FindROM(unsigned char *diff, unsigned char id[]);
-unsigned char OW_ReadROM(unsigned char *buffer);
-unsigned char OW_MatchROM(unsigned char *rom);
+typedef uint8_t OW_ROM_t [OW_ROMCODE_SIZE];
+
+uint8_t OW_Reset(void);
+void    OW_WriteBit(unsigned char bit);
+uint8_t OW_ReadBit(void);
+uint8_t OW_ReadByte(void);
+void    OW_WriteByte(unsigned char byte);
+uint8_t OW_SearchROM(unsigned char diff, unsigned char *id);
+void    OW_FindROM(unsigned char *diff, unsigned char id[]);
+uint8_t OW_ReadROM(unsigned char *buffer);
+uint8_t OW_MatchROM(unsigned char *rom);
 uint8_t OW_CRC8 (uint8_t *data, uint8_t count);
-uint8_t OW_SearchDevices(uint8_t devices[][8], uint8_t max_count);
+uint8_t OW_SearchDevices(OW_ROM_t devices[], uint8_t max_count);
 
 #endif
