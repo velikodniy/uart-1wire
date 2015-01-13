@@ -1,5 +1,6 @@
 #include "config.h"
 #include <avr/sfr_defs.h>
+#include <util/crc16.h>
 #include <util/delay.h>
 #include "onewire.h"
 
@@ -151,4 +152,12 @@ unsigned char OW_MatchROM(unsigned char *rom)
     for(unsigned char i=0; i<8; i++)
         OW_WriteByte(rom[i]);
     return 1;
+}
+
+// Optimized Dallas (now Maxim) iButton 8-bit CRC calculation.
+uint8_t OW_CRC8 (uint8_t *data, uint8_t count) {
+    uint8_t crc = 0x00; // Initial value
+    for (uint8_t i = 0; i < count; i++)
+    crc = _crc_ibutton_update(crc, data[i]);
+    return crc;
 }

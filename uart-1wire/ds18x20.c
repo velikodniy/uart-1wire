@@ -1,5 +1,5 @@
 #include "config.h"
-#include <util/crc16.h>
+#include "onewire.h"
 #include "ds18x20.h"
 
 uint8_t DS18x20_StartMeasure(uint8_t* rom)
@@ -14,16 +14,6 @@ uint8_t DS18x20_StartMeasure(uint8_t* rom)
     return 1;
 }
 
-#ifdef DS18X20_CHECK_CRC
-// Optimized Dallas (now Maxim) iButton 8-bit CRC calculation.
-uint8_t crc8 (uint8_t *data, uint8_t count) {
-    uint8_t crc = 0x00; // Initial value
-    for (uint8_t i = 0; i < count; i++)
-        crc = _crc_ibutton_update(crc, data[i]);
-    return crc;
-}
-#endif 
-
 uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 {
     //Reset, skip ROM and send command to read Scratchpad
@@ -34,11 +24,11 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
     
     OW_WriteByte(THERM_CMD_RSCRATCHPAD);
     
-#ifdef DS18X20_CHECK_CRC
+#ifndef DS18X20_SKIP_CRC
     uint8_t    buff[10] = {1,2,3,4,5,6,7,8,9};
     for (uint8_t i=0; i<9; i++) buff[i] = OW_ReadByte();
     buffer[0] = buff[0]; buffer[1] = buff[1];
-    if (crc8(buff, 9)) return 0;    // Error if CRC is incorrect
+    if (OW_CRC8(buff, 9)) return 0;    // Error if CRC is incorrect
 #else 
     //Read Scratchpad (only 2 first bytes)
     buffer[0] = OW_ReadByte(); // Read TL
@@ -52,7 +42,7 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 // temp must be uint8_t[2] array.
 // temp[0] - integer part
 // temp[1] - fractional part (*10^-2)
-void DS18x20_DataConvert(uint8_t* data, int8_t* temp)
+uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
 {
     // Store temperature integer part
     temp[0] = data[0] >> 4;             // Decode LS byte

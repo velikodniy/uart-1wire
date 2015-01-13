@@ -50,5 +50,6 @@ unsigned char OW_SearchROM(unsigned char diff, unsigned char *id);
 void OW_FindROM(unsigned char *diff, unsigned char id[]);
 unsigned char OW_ReadROM(unsigned char *buffer);
 unsigned char OW_MatchROM(unsigned char *rom);
+uint8_t OW_CRC8 (uint8_t *data, uint8_t count);
 
 #endif

@@ -14,6 +14,6 @@
 #define OW_BIT                  0           // Bit of 1-wire port
 
 // ds18x20 settings
-#define DS18X20_CHECK_CRC       1           // Check CRC
+#define DS18X20_SKIP_CRC        0           // Skip CRC checking
 
 #endif /* CONFIG_H_ */
