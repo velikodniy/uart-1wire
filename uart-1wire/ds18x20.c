@@ -64,3 +64,44 @@ uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
     return 1;
 }
 
+// Set ADC resolution
+// res = 9, 10, 11, or 12
+uint8_t DS18x20_SetResolution(uint8_t* rom, uint8_t res) {
+    uint8_t data[3] = {0};
+    
+    // Convert res to bits
+    if (res < 9 || res > 12)
+        return 0;
+    res -= 9;
+    
+    // Config register value
+    data[2] = res << 5;
+    data[2] |= 0x1f;
+    
+    // Send data
+    if (!OW_Reset()) return 0;
+    if (rom) OW_MatchROM(rom);
+    else OW_WriteByte(OW_CMD_SKIPROM);
+    
+    OW_WriteByte(THERM_CMD_WSCRATCHPAD);
+    OW_WriteByte(data[0]);
+    OW_WriteByte(data[1]);
+    OW_WriteByte(data[2]);
+    
+    return 1;
+}
+
+// Wait for temp. measuring to finish
+// res = 9, 10, 11, or 12
+void DS18x20_WaitForMeasure(uint8_t res) {
+    switch(res) {
+    case 12:
+        _delay_ms(375);
+    case 11:
+        _delay_ms(187);
+    case 10:
+        _delay_ms(94);
+    case 9:
+        _delay_ms(94);
+    }
+}
