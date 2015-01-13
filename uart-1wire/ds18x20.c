@@ -1,4 +1,5 @@
 #include "config.h"
+#include <util/delay.h>
 #include "onewire.h"
 #include "ds18x20.h"
 
@@ -60,4 +61,6 @@ uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
     frac >>= 3;
     // Store value
     temp[1] = frac;
+    return 1;
 }
+
