@@ -36,6 +36,7 @@ int main(void)
 
 void interactive(void) {
     puts_P(PSTR("\n1wire-UART bridge"));
+    puts_P(PSTR("Commands: Quit, Devices"));
     char cmd;
     while(1) {
         putchar('>');
