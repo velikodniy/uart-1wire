@@ -11,7 +11,7 @@
 
 // Port setup
 #define OW_DDR    OW_PORT_LETTER(DDR)
-#define OW_PORT    OW_PORT_LETTER(PORT)
+#define OW_PORT   OW_PORT_LETTER(PORT)
 #define OW_PIN    OW_PORT_LETTER(PIN)
 
 // Command codes
@@ -51,5 +51,6 @@ void OW_FindROM(unsigned char *diff, unsigned char id[]);
 unsigned char OW_ReadROM(unsigned char *buffer);
 unsigned char OW_MatchROM(unsigned char *rom);
 uint8_t OW_CRC8 (uint8_t *data, uint8_t count);
+uint8_t OW_SearchDevices(uint8_t devices[][8], uint8_t max_count);
 
 #endif

@@ -161,3 +161,23 @@ uint8_t OW_CRC8 (uint8_t *data, uint8_t count) {
     crc = _crc_ibutton_update(crc, data[i]);
     return crc;
 }
+
+// Search all devices
+uint8_t OW_SearchDevices(uint8_t devices[][8], uint8_t max_count)
+{
+    uint8_t id[OW_ROMCODE_SIZE];
+    uint8_t i, status;
+
+    status = OW_SEARCH_FIRST;
+    for (i = 0; status != OW_LAST_DEVICE && i < max_count; i++) {
+        OW_FindROM(&status, id);
+
+        if (status == OW_PRESENCE_ERR || status == OW_DATA_ERR)
+            break;
+
+        for (uint8_t j = 0; j < OW_ROMCODE_SIZE; j++)
+            devices[i][j] = id[j];
+    }
+
+    return i;
+}
