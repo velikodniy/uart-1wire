@@ -33,14 +33,9 @@ uint8_t OW_ReadBit(void);
 void    OW_WriteByte(uint8_t byte);
 uint8_t OW_ReadByte(void);
 
-uint8_t OW_SearchROM(uint8_t diff, OW_ROM_t id);
-void    OW_FindROM(uint8_t *diff, OW_ROM_t id);
-uint8_t OW_ReadROM(uint8_t *buffer);
-uint8_t OW_MatchROM(uint8_t *rom);
-
+uint8_t OW_SearchDevices(OW_ROM_t devices[], uint8_t max_count);
 uint8_t OW_SelectROM(OW_ROM_t rom);
 
 uint8_t OW_CRC8 (uint8_t *data, uint8_t count);
-uint8_t OW_SearchDevices(OW_ROM_t devices[], uint8_t max_count);
 
 #endif
