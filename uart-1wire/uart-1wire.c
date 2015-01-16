@@ -1,7 +1,6 @@
 ﻿#include "config.h"
 #include <stdio.h>
 #include <avr/io.h>
-#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include "uart.h"
 #include "onewire.h"
@@ -15,10 +14,13 @@ OW_ROM_t    devices[MAXDEVICES];
 void interactive(void);
 void print_address(uint8_t* addr);
 void print_devices_list(void);
+void pullup(void);
 
 int main(void)
 {
     char cmd;
+    
+    pullup();
     
     UART_init();
     num_of_devices = OW_SearchDevices(devices, MAXDEVICES);
@@ -32,6 +34,13 @@ int main(void)
             break;
         }
     }
+}
+
+// Pull-up unused pins
+void pullup(void) {
+    DDRB = 0x00; PORTB = 0xFF;
+    DDRC = 0x00; PORTC = 0xFF;
+    DDRD = 0x00; PORTC = 0xFF;
 }
 
 void interactive(void) {
