@@ -4,6 +4,10 @@
 #include "config.h"
 #include <avr/io.h>
 
+// Return codes
+#define OW_OK   1
+#define OW_FAIL 0
+
 // Port setup
 #define OW_DDR    OW_PORT_LETTER(DDR)
 #define OW_PORT   OW_PORT_LETTER(PORT)

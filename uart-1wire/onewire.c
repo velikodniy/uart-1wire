@@ -39,6 +39,7 @@ uint8_t OW_CheckIn(void)
     return bit_is_set(OW_PIN, OW_BIT);
 }
 
+// Reset line
 uint8_t OW_Reset(void)
 {
     uint8_t status;
@@ -53,9 +54,7 @@ uint8_t OW_Reset(void)
     _delay_us(420);
     
     //Return the value read from the presence pulse (0=OK, 1=WRONG)
-    return !status;
-    //    return 1 if found
-    //    return 0 if not found
+    return status==0 ? OW_OK : OW_FAIL;
 }
 
 void OW_WriteBit(uint8_t bit)
@@ -151,7 +150,6 @@ void OW_FindROM(uint8_t *diff, OW_ROM_t rom)
 {
     do {
         *diff = OW_SearchROM (*diff, rom);
-     
     } while (!( *diff == OW_PRESENCE_ERR ||
                 *diff == OW_DATA_ERR     ||
                 *diff == OW_LAST_DEVICE  ));
@@ -160,30 +158,30 @@ void OW_FindROM(uint8_t *diff, OW_ROM_t rom)
 uint8_t OW_ReadROM(uint8_t *buffer)
 {
     if (!OW_Reset())
-        return 0;
+        return OW_FAIL;
     OW_WriteByte(OW_CMD_READROM);
     for (uint8_t i = 0; i < 8; i++)
         buffer[i] = OW_ReadByte();
-    return 1;
+    return OW_OK;
 }
 
 uint8_t OW_MatchROM(OW_ROM_t rom)
 {
     if (!OW_Reset())
-        return 0;
+        return OW_FAIL;
         
     OW_WriteByte(OW_CMD_MATCHROM);    
     for(uint8_t i = 0; i < 8; i++)
         OW_WriteByte(rom[i]);
-    return 1;
+    return OW_OK;
 }
 
 // Select specified ROM (select all if rom=0)
 uint8_t OW_SelectROM(OW_ROM_t rom) {
-    if (!OW_Reset()) return 0;
+    if (!OW_Reset()) return OW_FAIL;
     if (rom) OW_MatchROM(rom);
     else OW_WriteByte(OW_CMD_SKIPROM);
-    return 1;
+    return OW_OK;
 }
 
 // Optimized Dallas (now Maxim) iButton 8-bit CRC calculation.

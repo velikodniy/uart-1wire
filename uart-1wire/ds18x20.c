@@ -6,30 +6,31 @@
 //Start temperature conversion
 uint8_t DS18x20_StartMeasure(OW_ROM_t rom)
 {
-    OW_SelectROM(rom);
+    if (OW_SelectROM(rom) == OW_FAIL)
+        return DS18x20_FAIL;
     OW_WriteByte(THERM_CMD_CONVERTTEMP);
-    return 1;
+    return DS18x20_OK;
 }
 
+// Read data from sensor's scratchpad
 uint8_t DS18x20_ReadData(OW_ROM_t rom, uint8_t *buffer)
 {
-    OW_SelectROM(rom);
-    
-    // Send command to read Scratchpad
+    if (OW_SelectROM(rom) == OW_FAIL)
+        return DS18x20_FAIL;
     OW_WriteByte(THERM_CMD_RSCRATCHPAD);
     
 #ifndef DS18X20_SKIP_CRC
     uint8_t    buff[10] = {1,2,3,4,5,6,7,8,9};  // FIXME
     for (uint8_t i=0; i<9; i++) buff[i] = OW_ReadByte();
     buffer[0] = buff[0]; buffer[1] = buff[1];
-    if (OW_CRC8(buff, 9)) return 0;    // Error if CRC is incorrect
+    if (OW_CRC8(buff, 9)) return DS18x20_FAIL;  // Error if CRC is incorrect
 #else 
     //Read Scratchpad (only 2 first bytes)
     buffer[0] = OW_ReadByte(); // Read TL
     buffer[1] = OW_ReadByte(); // Read TH    
 #endif
 
-    return 1;
+    return DS18x20_OK;
 }
 
 // Convert data to Celsius degrees
@@ -54,7 +55,7 @@ uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
     frac >>= 3;
     // Store value
     temp[1] = frac;
-    return 1;
+    return 1;   // FIXME
 }
 
 // Set ADC resolution
@@ -72,14 +73,15 @@ uint8_t DS18x20_SetResolution(OW_ROM_t rom, uint8_t res) {
     data[2] |= 0x1f;
     
     // Send data
-    OW_SelectROM(rom);
+    if (OW_SelectROM(rom) == OW_FAIL)
+        return DS18x20_FAIL;
     
     OW_WriteByte(THERM_CMD_WSCRATCHPAD);
     OW_WriteByte(data[0]);
     OW_WriteByte(data[1]);
     OW_WriteByte(data[2]);
     
-    return 1;
+    return DS18x20_OK;
 }
 
 // Wait for temp. measuring to finish
