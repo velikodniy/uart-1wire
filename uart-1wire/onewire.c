@@ -4,6 +4,23 @@
 #include <util/delay.h>
 #include "onewire.h"
 
+// Command codes
+#define OW_CMD_SEARCHROM    0xF0
+#define OW_CMD_READROM      0x33
+#define OW_CMD_MATCHROM     0x55
+#define OW_CMD_SKIPROM      0xCC
+
+#define OW_SEARCH_FIRST     0xFF        // start new search
+#define OW_PRESENCE_ERR     0xFF
+#define OW_DATA_ERR         0xFE
+#define OW_LAST_DEVICE      0x00        // last device found
+                         // 0x01..0x40     continue searching
+
+// Useful macros
+#define sbi(reg,bit)        reg |= (1<<bit)
+#define cbi(reg,bit)        reg &= ~(1<<bit)
+#define ibi(reg,bit)        reg ^= (1<<bit)
+
 // Pull (mode=1) or release (mode=0) line
 void OW_Set(uint8_t mode)
 {
@@ -158,6 +175,14 @@ uint8_t OW_MatchROM(OW_ROM_t rom)
     OW_WriteByte(OW_CMD_MATCHROM);    
     for(uint8_t i = 0; i < 8; i++)
         OW_WriteByte(rom[i]);
+    return 1;
+}
+
+// Select specified ROM (select all if rom=0)
+uint8_t OW_SelectROM(OW_ROM_t rom) {
+    if (!OW_Reset()) return 0;
+    if (rom) OW_MatchROM(rom);
+    else OW_WriteByte(OW_CMD_SKIPROM);
     return 1;
 }
 

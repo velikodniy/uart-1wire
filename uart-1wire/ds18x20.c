@@ -3,30 +3,23 @@
 #include "onewire.h"
 #include "ds18x20.h"
 
+//Start temperature conversion
 uint8_t DS18x20_StartMeasure(OW_ROM_t rom)
 {
-    //Reset, skip ROM and start temperature conversion
-    if (!OW_Reset()) return 0;
-    
-    if (rom) OW_MatchROM(rom);
-    else OW_WriteByte(OW_CMD_SKIPROM);
-    
+    OW_SelectROM(rom);
     OW_WriteByte(THERM_CMD_CONVERTTEMP);
     return 1;
 }
 
 uint8_t DS18x20_ReadData(OW_ROM_t rom, uint8_t *buffer)
 {
-    //Reset, skip ROM and send command to read Scratchpad
-    if (!OW_Reset()) return 0;
+    OW_SelectROM(rom);
     
-    if (rom) OW_MatchROM(rom);
-    else OW_WriteByte(OW_CMD_SKIPROM);
-    
+    // Send command to read Scratchpad
     OW_WriteByte(THERM_CMD_RSCRATCHPAD);
     
 #ifndef DS18X20_SKIP_CRC
-    uint8_t    buff[10] = {1,2,3,4,5,6,7,8,9};
+    uint8_t    buff[10] = {1,2,3,4,5,6,7,8,9};  // FIXME
     for (uint8_t i=0; i<9; i++) buff[i] = OW_ReadByte();
     buffer[0] = buff[0]; buffer[1] = buff[1];
     if (OW_CRC8(buff, 9)) return 0;    // Error if CRC is incorrect
@@ -79,9 +72,7 @@ uint8_t DS18x20_SetResolution(OW_ROM_t rom, uint8_t res) {
     data[2] |= 0x1f;
     
     // Send data
-    if (!OW_Reset()) return 0;
-    if (rom) OW_MatchROM(rom);
-    else OW_WriteByte(OW_CMD_SKIPROM);
+    OW_SelectROM(rom);
     
     OW_WriteByte(THERM_CMD_WSCRATCHPAD);
     OW_WriteByte(data[0]);
