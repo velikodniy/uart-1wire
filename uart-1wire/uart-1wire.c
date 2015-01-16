@@ -68,11 +68,20 @@ void print_devices_list(void)
         switch (devices[i][0]) {
         case OW_DS18B20_FAMILY_CODE:
             printf_P(PSTR("Thermometer DS18B20"));
-            DS18x20_SetResolution(devices[i], 12);
-            DS18x20_StartMeasure(devices[i]);
+            if (DS18x20_SetResolution(devices[i], 12) == DS18x20_FAIL) {
+                printf_P(PSTR(": Error (SetResolution)"));
+                break;
+            }
+            if (DS18x20_StartMeasure(devices[i]) == DS18x20_FAIL) {
+                printf_P(PSTR(": Error (StartMeasure)"));
+                break;
+            }
             DS18x20_WaitForMeasure(12);
             uint8_t data[2];
-            DS18x20_ReadData(devices[i], data);
+            if (DS18x20_ReadData(devices[i], data) == DS18x20_FAIL) {
+                printf_P(PSTR(": CRC error"));
+                break;
+            }                
             int8_t t[2];
             DS18x20_DataConvert(data, t);
             printf_P(PSTR(": %d,%02d C"), t[0], t[1]);
