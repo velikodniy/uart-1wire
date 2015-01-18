@@ -16,6 +16,8 @@ void print_address(uint8_t* addr);
 void print_devices_list(void);
 void pullup(void);
 
+#define ABS(x)  ((x) > 0 ? (x) : -(x))
+
 int main(void)
 {
     char cmd;
@@ -100,7 +102,7 @@ void print_devices_list(void)
             }                
             int8_t t[2];
             DS18x20_DataConvert(data, t);
-            printf_P(PSTR(": %d,%02d C"), t[0], t[1]);
+            printf_P(PSTR(": %d,%02d C"), t[0], ABS(t[1]));
             break;
         
         case OW_DS18S20_FAMILY_CODE:

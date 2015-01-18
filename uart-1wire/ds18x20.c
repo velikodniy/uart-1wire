@@ -37,16 +37,15 @@ uint8_t DS18x20_ReadData(OW_ROM_t rom, uint8_t *buffer)
 // temp must be uint8_t[2] array.
 // temp[0] - integer part
 // temp[1] - fractional part (*10^-2)
+// Examples:
+//      +17.12 -> [ 17,  12]
+//      -17.12 -> [-17, -12]
 uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
 {
     // Store temperature integer part
     temp[0] = data[0] >> 4;             // Decode LS byte
     temp[0] |= (data[1] & 0x07) << 4;   // Decode MS byte
 
-    // Check sign
-    if (data[1] & 0xF8)
-        temp[0] = - temp[0];
-    
     // Compute fractional part (*10^-2)
     uint16_t frac;
     frac = data[0] & 0x0f;
@@ -55,6 +54,13 @@ uint8_t DS18x20_DataConvert(uint8_t* data, int8_t* temp)
     frac >>= 3;
     // Store value
     temp[1] = frac;
+
+    // Check sign
+    if (data[1] & 0xF8) {
+        temp[0] = temp[0] - 127;
+        temp[1] -= 100;
+    }
+
     return 1;   // FIXME
 }
 
