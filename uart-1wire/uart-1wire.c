@@ -34,11 +34,11 @@ int main(void)
             break;
         
         case 'n':   // Get number of thermometers, select #0 if any (returns one byte, 0xFF on error)
-        
+            break;
         case 's':   // Select thermometer (eg. ['s', 0x02] selects #2), returns non-zero on error
-                
+            break;
         case 't':   // Get temperature (returns two signed bytes, second is 0xFF on error)
-        
+            break;
         }
     }
 }
