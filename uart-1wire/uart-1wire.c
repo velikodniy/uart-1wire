@@ -49,7 +49,7 @@ int main(void)
 void pullup(void) {
     DDRB = 0x00; PORTB = 0xFF;
     DDRC = 0x00; PORTC = 0xFF;
-    DDRD = 0x00; PORTC = 0xFF;
+    DDRD = 0x00; PORTD = 0xFF;
 }
 
 void interactive(void) {
